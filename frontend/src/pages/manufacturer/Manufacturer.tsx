@@ -1,0 +1,160 @@
+import ManufacturerTable from "../../components/ManufacturerTable";
+import AddManufacturerModal from "../../components/AddManufacturerModal";
+import { manufacturers as initialManufacturers } from "../../services/manufacturerService";
+import { useEffect, useState } from "react";
+
+interface ManufacturerType {
+  id: number;
+  name: string;
+  location: string;
+  contact: string;
+}
+
+function Manufacturer() {
+
+  const [manufacturers, setManufacturers] =
+    useState<ManufacturerType[]>(() => {
+
+      const storedManufacturers =
+        localStorage.getItem(
+          "manufacturers"
+        );
+
+      return storedManufacturers
+        ? JSON.parse(storedManufacturers)
+        : initialManufacturers;
+    });
+
+  const [search, setSearch] =
+    useState("");
+
+  const [showModal, setShowModal] =
+    useState(false);
+
+  const [editingManufacturer, setEditingManufacturer] =
+    useState<any>(null);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "manufacturers",
+      JSON.stringify(manufacturers)
+    );
+  }, [manufacturers]);
+
+  const handleAddManufacturer = (
+    manufacturer: any
+  ) => {
+    setManufacturers([
+      ...manufacturers,
+      manufacturer,
+    ]);
+  };
+
+  const handleDeleteManufacturer = (
+    id: number
+  ) => {
+    setManufacturers(
+      manufacturers.filter(
+        (manufacturer) =>
+          manufacturer.id !== id
+      )
+    );
+  };
+
+  const handleUpdateManufacturer = (
+    updatedManufacturer: any
+  ) => {
+    setManufacturers(
+      manufacturers.map(
+        (manufacturer) =>
+          manufacturer.id ===
+          updatedManufacturer.id
+            ? updatedManufacturer
+            : manufacturer
+      )
+    );
+
+    setEditingManufacturer(null);
+  };
+
+  const filteredManufacturers =
+    manufacturers.filter(
+      (manufacturer) =>
+        manufacturer.name
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          )
+    );
+
+  return (
+    <div>
+
+      <div className="flex justify-between items-center mb-6">
+
+        <h1 className="text-3xl font-bold">
+          Manufacturer Management
+        </h1>
+
+        <button
+          onClick={() =>
+            setShowModal(true)
+          }
+          className="bg-green-600 px-4 py-2 rounded"
+        >
+          Add Manufacturer
+        </button>
+
+      </div>
+
+      <input
+        type="text"
+        placeholder="Search manufacturer..."
+        value={search}
+        onChange={(e) =>
+          setSearch(
+            e.target.value
+          )
+        }
+        className="w-full mb-5 p-3 rounded bg-black border border-gray-700"
+      />
+
+      <ManufacturerTable
+        manufacturers={
+          filteredManufacturers
+        }
+        onDelete={
+          handleDeleteManufacturer
+        }
+        onEdit={(manufacturer) => {
+          setEditingManufacturer(
+            manufacturer
+          );
+          setShowModal(true);
+        }}
+      />
+
+      {showModal && (
+        <AddManufacturerModal
+          manufacturer={
+            editingManufacturer
+          }
+          onClose={() => {
+            setShowModal(false);
+            setEditingManufacturer(
+              null
+            );
+          }}
+          onAdd={
+            editingManufacturer
+              ? handleUpdateManufacturer
+              : handleAddManufacturer
+          }
+        />
+      )}
+
+    </div>
+  );
+}
+
+export default Manufacturer;
