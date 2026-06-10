@@ -48,9 +48,112 @@
 
 // export default RecentActivity;
 
+// import { useEffect, useState } from "react";
+// import { getActivities } from "../services/activityService";
+// import type { Activity } from "../services/activityService";
+
+// function RecentActivity() {
+//   const [activities, setActivities] =
+//     useState<Activity[]>([]);
+
+//   useEffect(() => {
+//     const loadActivities = () => {
+//       setActivities(
+//         getActivities()
+//       );
+//     };
+
+//     loadActivities();
+
+//     window.addEventListener(
+//       "activityUpdated",
+//       loadActivities
+//     );
+
+//     return () => {
+//       window.removeEventListener(
+//         "activityUpdated",
+//         loadActivities
+//       );
+//     };
+//   }, []);
+
+//   return (
+//     <div className="bg-black rounded-xl p-5">
+
+//       <h2 className="text-2xl font-bold mb-4">
+//         Recent Activities
+//       </h2>
+
+//       <table className="w-full">
+
+//         <thead>
+//           <tr>
+//             <th className="text-left p-2">
+//               Action
+//             </th>
+
+//             <th className="text-left p-2">
+//               User
+//             </th>
+
+//             <th className="text-left p-2">
+//               Time
+//             </th>
+//           </tr>
+//         </thead>
+
+//         <tbody>
+
+//           {activities.length === 0 ? (
+//             <tr>
+//               <td
+//                 colSpan={3}
+//                 className="p-4 text-center"
+//               >
+//                 No Activities Yet
+//               </td>
+//             </tr>
+//           ) : (
+//             activities.map(
+//               (activity, index) => (
+//                 <tr
+//                   key={index}
+//                   className="border-t border-gray-700"
+//                 >
+//                   <td className="p-2">
+//                     {activity.action}
+//                   </td>
+
+//                   <td className="p-2">
+//                     {activity.user}
+//                   </td>
+
+//                   <td className="p-2">
+//                     {activity.time}
+//                   </td>
+//                 </tr>
+//               )
+//             )
+//           )}
+
+//         </tbody>
+
+//       </table>
+
+//     </div>
+//   );
+// }
+
+// export default RecentActivity;
 import { useEffect, useState } from "react";
-import { getActivities } from "../services/activityService";
-import type { Activity } from "../services/activityService";
+import {
+  getActivities,
+} from "../services/activityService";
+
+import type {
+  Activity,
+} from "../services/activityService";
 
 function RecentActivity() {
   const [activities, setActivities] =
@@ -79,67 +182,149 @@ function RecentActivity() {
   }, []);
 
   return (
-    <div className="bg-black rounded-xl p-5">
+    <div
+      className="
+      bg-[#1f2937]
+      border
+      border-gray-700
+      rounded-xl
+      shadow-lg
+      "
+    >
 
-      <h2 className="text-2xl font-bold mb-4">
-        Recent Activities
-      </h2>
+      {/* Header */}
 
-      <table className="w-full">
+      <div
+        className="
+        flex
+        justify-between
+        items-center
+        p-5
+        border-b
+        border-gray-700
+        "
+      >
 
-        <thead>
-          <tr>
-            <th className="text-left p-2">
-              Action
-            </th>
+        <div>
 
-            <th className="text-left p-2">
-              User
-            </th>
+          <h2
+            className="
+            text-2xl
+            font-bold
+            text-white
+            "
+          >
+            Recent Activities
+          </h2>
 
-            <th className="text-left p-2">
-              Time
-            </th>
-          </tr>
-        </thead>
+          <p
+            className="
+            text-sm
+            text-gray-400
+            mt-1
+            "
+          >
+            Latest system activities
+          </p>
 
-        <tbody>
+        </div>
 
-          {activities.length === 0 ? (
-            <tr>
-              <td
-                colSpan={3}
-                className="p-4 text-center"
-              >
-                No Activities Yet
-              </td>
-            </tr>
-          ) : (
-            activities.map(
-              (activity, index) => (
-                <tr
-                  key={index}
-                  className="border-t border-gray-700"
-                >
-                  <td className="p-2">
-                    {activity.action}
-                  </td>
+      </div>
 
-                  <td className="p-2">
-                    {activity.user}
-                  </td>
+      {/* Activity List */}
 
-                  <td className="p-2">
-                    {activity.time}
-                  </td>
-                </tr>
-              )
-            )
-          )}
+      <div className="p-4">
 
-        </tbody>
+        {activities.length === 0 ? (
 
-      </table>
+          <div
+            className="
+            text-center
+            py-10
+            text-gray-400
+            "
+          >
+            No Activities Yet
+          </div>
+
+        ) : (
+
+          <div className="space-y-3">
+
+            {activities
+              .slice()
+              .reverse()
+              .map(
+                (
+                  activity,
+                  index
+                ) => (
+
+                  <div
+                    key={index}
+                    className="
+                    flex
+                    justify-between
+                    items-center
+                    bg-[#111827]
+                    border
+                    border-gray-700
+                    rounded-lg
+                    p-4
+                    hover:bg-gray-800
+                    transition
+                    "
+                  >
+
+                    <div>
+
+                      <p
+                        className="
+                        text-white
+                        font-medium
+                        "
+                      >
+                        {
+                          activity.action
+                        }
+                      </p>
+
+                      <p
+                        className="
+                        text-gray-400
+                        text-sm
+                        "
+                      >
+                        User:
+                        {" "}
+                        {
+                          activity.user
+                        }
+                      </p>
+
+                    </div>
+
+                    <div
+                      className="
+                      text-sm
+                      text-gray-500
+                      "
+                    >
+                      {
+                        activity.time
+                      }
+                    </div>
+
+                  </div>
+
+                )
+              )}
+
+          </div>
+
+        )}
+
+      </div>
 
     </div>
   );

@@ -100,7 +100,8 @@ import {
 
 import Login from "../pages/Login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
-import Supplier from "../pages/supplier/Supplier";
+// import Supplier from "../pages/supplier/Supplier";
+import SupplierPage from "../pages/supplier/Supplier";
 import Material from "../pages/material/Material";
 import Manufacturer from "../pages/manufacturer/Manufacturer";
 import Employee from "../pages/employee/Employee";
@@ -127,14 +128,18 @@ function AppRoutes() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/supplier"
           element={
             <ProtectedRoute>
               <Supplier />
             </ProtectedRoute>
           }
-        />
+        /> */}
+        <Route
+  path="/supplier"
+  element={<SupplierPage />}
+/>
 
         <Route
           path="/material"

@@ -149,6 +149,158 @@
 // }
 
 // export default Employee;
+// import EmployeeTable from "../../components/EmployeeTable";
+// import AddEmployeeModal from "../../components/AddEmployeeModal";
+// import { employees as initialEmployees } from "../../services/employeeService";
+// import { addActivity } from "../../services/activityService";
+// import { useEffect, useState } from "react";
+
+// interface EmployeeType {
+//   id: number;
+//   name: string;
+//   email: string;
+//   department: string;
+//   salary: number;
+// }
+
+// function Employee() {
+//   const [employees, setEmployees] =
+//     useState<EmployeeType[]>(() => {
+//       const storedEmployees =
+//         localStorage.getItem("employees");
+
+//       return storedEmployees
+//         ? JSON.parse(storedEmployees)
+//         : initialEmployees;
+//     });
+
+//   const [search, setSearch] =
+//     useState("");
+
+//   const [showModal, setShowModal] =
+//     useState(false);
+
+//   const [editingEmployee, setEditingEmployee] =
+//     useState<EmployeeType | null>(null);
+
+//   useEffect(() => {
+//     localStorage.setItem(
+//       "employees",
+//       JSON.stringify(employees)
+//     );
+//   }, [employees]);
+
+//   const handleAddEmployee = (
+//     employee: EmployeeType
+//   ) => {
+//     setEmployees([
+//       ...employees,
+//       employee,
+//     ]);
+
+//     addActivity(
+//       `Employee Added: ${employee.name}`
+//     );
+//   };
+
+//   const handleDeleteEmployee = (
+//     id: number
+//   ) => {
+//     setEmployees(
+//       employees.filter(
+//         (employee) =>
+//           employee.id !== id
+//       )
+//     );
+
+//     addActivity(
+//       "Employee Deleted"
+//     );
+//   };
+
+//   const handleUpdateEmployee = (
+//     updatedEmployee: EmployeeType
+//   ) => {
+//     setEmployees(
+//       employees.map((employee) =>
+//         employee.id ===
+//         updatedEmployee.id
+//           ? updatedEmployee
+//           : employee
+//       )
+//     );
+
+//     addActivity(
+//       `Employee Updated: ${updatedEmployee.name}`
+//     );
+
+//     setEditingEmployee(null);
+//   };
+
+//   const filteredEmployees =
+//     employees.filter((employee) =>
+//       employee.name
+//         .toLowerCase()
+//         .includes(
+//           search.toLowerCase()
+//         )
+//     );
+
+//   return (
+//     <div>
+//       <div className="flex justify-between items-center mb-6">
+//         <h1 className="text-3xl font-bold">
+//           Employee Management
+//         </h1>
+
+//         <button
+//           onClick={() =>
+//             setShowModal(true)
+//           }
+//           className="bg-green-600 px-4 py-2 rounded"
+//         >
+//           Add Employee
+//         </button>
+//       </div>
+
+//       <input
+//         type="text"
+//         placeholder="Search employee..."
+//         value={search}
+//         onChange={(e) =>
+//           setSearch(e.target.value)
+//         }
+//         className="w-full mb-5 p-3 rounded bg-black border border-gray-700"
+//       />
+
+//       <EmployeeTable
+//         employees={filteredEmployees}
+//         onDelete={handleDeleteEmployee}
+//         onEdit={(employee: EmployeeType) => {
+//           setEditingEmployee(employee);
+//           setShowModal(true);
+//         }}
+//       />
+
+//       {showModal && (
+//         <AddEmployeeModal
+//           employee={editingEmployee}
+//           onClose={() => {
+//             setShowModal(false);
+//             setEditingEmployee(null);
+//           }}
+//           onAdd={
+//             editingEmployee
+//               ? handleUpdateEmployee
+//               : handleAddEmployee
+//           }
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Employee;
 import EmployeeTable from "../../components/EmployeeTable";
 import AddEmployeeModal from "../../components/AddEmployeeModal";
 import { employees as initialEmployees } from "../../services/employeeService";
@@ -157,20 +309,30 @@ import { useEffect, useState } from "react";
 
 interface EmployeeType {
   id: number;
+  employeeId: string;
   name: string;
   email: string;
+  mobile: string;
   department: string;
+  designation: string;
   salary: number;
+  joiningDate: string;
+  status: string;
 }
 
 function Employee() {
   const [employees, setEmployees] =
     useState<EmployeeType[]>(() => {
+
       const storedEmployees =
-        localStorage.getItem("employees");
+        localStorage.getItem(
+          "employees"
+        );
 
       return storedEmployees
-        ? JSON.parse(storedEmployees)
+        ? JSON.parse(
+            storedEmployees
+          )
         : initialEmployees;
     });
 
@@ -180,19 +342,27 @@ function Employee() {
   const [showModal, setShowModal] =
     useState(false);
 
-  const [editingEmployee, setEditingEmployee] =
-    useState<EmployeeType | null>(null);
+  const [
+    editingEmployee,
+    setEditingEmployee,
+  ] =
+    useState<EmployeeType | null>(
+      null
+    );
 
   useEffect(() => {
     localStorage.setItem(
       "employees",
-      JSON.stringify(employees)
+      JSON.stringify(
+        employees
+      )
     );
   }, [employees]);
 
   const handleAddEmployee = (
     employee: EmployeeType
   ) => {
+
     setEmployees([
       ...employees,
       employee,
@@ -206,6 +376,7 @@ function Employee() {
   const handleDeleteEmployee = (
     id: number
   ) => {
+
     setEmployees(
       employees.filter(
         (employee) =>
@@ -221,6 +392,7 @@ function Employee() {
   const handleUpdateEmployee = (
     updatedEmployee: EmployeeType
   ) => {
+
     setEmployees(
       employees.map((employee) =>
         employee.id ===
@@ -234,21 +406,26 @@ function Employee() {
       `Employee Updated: ${updatedEmployee.name}`
     );
 
-    setEditingEmployee(null);
+    setEditingEmployee(
+      null
+    );
   };
 
   const filteredEmployees =
-    employees.filter((employee) =>
-      employee.name
-        .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
+    employees.filter(
+      (employee) =>
+        employee.name
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          )
     );
 
   return (
     <div>
+
       <div className="flex justify-between items-center mb-6">
+
         <h1 className="text-3xl font-bold">
           Employee Management
         </h1>
@@ -257,37 +434,108 @@ function Employee() {
           onClick={() =>
             setShowModal(true)
           }
-          className="bg-green-600 px-4 py-2 rounded"
+          className="
+          bg-green-600
+          px-4
+          py-2
+          rounded
+          "
         >
           Add Employee
         </button>
+
       </div>
 
-      <input
-        type="text"
-        placeholder="Search employee..."
-        value={search}
-        onChange={(e) =>
-          setSearch(e.target.value)
-        }
-        className="w-full mb-5 p-3 rounded bg-black border border-gray-700"
-      />
+      <div className="flex justify-between items-center mb-5">
+
+        <div className="flex gap-3">
+
+          <button
+            className="
+            px-4
+            py-2
+            bg-gray-700
+            rounded
+            "
+          >
+            Excel
+          </button>
+
+          <button
+            className="
+            px-4
+            py-2
+            bg-gray-700
+            rounded
+            "
+          >
+            PDF
+          </button>
+
+        </div>
+
+        <div className="flex items-center gap-2">
+
+          <label>
+            Search:
+          </label>
+
+          <input
+            type="text"
+            value={search}
+            onChange={(e) =>
+              setSearch(
+                e.target.value
+              )
+            }
+            className="
+            p-2
+            w-64
+            rounded
+            bg-black
+            border
+            border-gray-700
+            "
+          />
+
+        </div>
+
+      </div>
 
       <EmployeeTable
-        employees={filteredEmployees}
-        onDelete={handleDeleteEmployee}
-        onEdit={(employee: EmployeeType) => {
-          setEditingEmployee(employee);
+        employees={
+          filteredEmployees
+        }
+        onDelete={
+          handleDeleteEmployee
+        }
+        onEdit={(employee) => {
+
+          setEditingEmployee(
+            employee
+          );
+
           setShowModal(true);
+
         }}
       />
 
       {showModal && (
+
         <AddEmployeeModal
-          employee={editingEmployee}
+          employee={
+            editingEmployee
+          }
           onClose={() => {
-            setShowModal(false);
-            setEditingEmployee(null);
+
+            setShowModal(
+              false
+            );
+
+            setEditingEmployee(
+              null
+            );
+
           }}
           onAdd={
             editingEmployee
@@ -295,7 +543,9 @@ function Employee() {
               : handleAddEmployee
           }
         />
+
       )}
+
     </div>
   );
 }
