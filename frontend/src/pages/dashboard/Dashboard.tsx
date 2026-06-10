@@ -150,6 +150,7 @@ import {
   getMaterialCount,
   getManufacturerCount,
   getEmployeeCount,
+  getStoreCount,
 } from "../../services/dashboardService";
 
 function Dashboard() {
@@ -164,6 +165,8 @@ function Dashboard() {
     useState(0);
 
     const [employeeCount, setEmployeeCount] =
+  useState(0);
+  const [storeCount, setStoreCount] =
   useState(0);
 
 //   useEffect(() => {
@@ -195,6 +198,10 @@ useEffect(() => {
   setEmployeeCount(
     getEmployeeCount()
   );
+
+  setStoreCount(
+    getStoreCount()
+  );
 }, []);
 
   return (
@@ -207,25 +214,29 @@ useEffect(() => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
           <DashboardCard
-            title="Suppliers"
-            value={supplierCount.toString()}
-          />
+  title="Suppliers"
+  value={supplierCount.toString()}
+/>
 
-          <DashboardCard
-            title="Materials"
-            value={materialCount.toString()}
-          />
+<DashboardCard
+  title="Materials"
+  value={materialCount.toString()}
+/>
 
-          <DashboardCard
-            title="Manufacturers"
-            value={manufacturerCount.toString()}
-          />
+<DashboardCard
+  title="Manufacturers"
+  value={manufacturerCount.toString()}
+/>
 
-          <DashboardCard
+<DashboardCard
+  title="Stores"
+  value={storeCount.toString()}
+/>
+
+<DashboardCard
   title="Employees"
   value={employeeCount.toString()}
 />
-
         </div>
 
         <div className="mt-6">

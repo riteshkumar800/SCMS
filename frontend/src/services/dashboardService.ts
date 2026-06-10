@@ -54,3 +54,12 @@ export const getEmployeeCount = () => {
     localStorage.getItem("employees") || "[]"
   ).length;
 };
+
+export const getStoreCount = () => {
+  const stores =
+    JSON.parse(
+      localStorage.getItem("stores") || "[]"
+    );
+
+  return stores.length;
+};

@@ -44,12 +44,9 @@
 import SupplierTable from "../../components/SupplierTable";
 import AddSupplierModal from "../../components/AddSupplierModal";
 import { suppliers as initialSuppliers } from "../../services/supplierService";
+import { addActivity } from "../../services/activityService";
 import { useEffect, useState } from "react";
 
-function Supplier() {
-
-//   const [suppliers, setSuppliers] =
-//     useState(initialSuppliers);
 interface SupplierType {
   id: number;
   name: string;
@@ -58,18 +55,18 @@ interface SupplierType {
   city: string;
 }
 
-const [suppliers, setSuppliers] =
-  useState<SupplierType[]>(() => {
+function Supplier() {
+  const [suppliers, setSuppliers] =
+    useState<SupplierType[]>(() => {
+      const storedSuppliers =
+        localStorage.getItem(
+          "suppliers"
+        );
 
-    const storedSuppliers =
-      localStorage.getItem(
-        "suppliers"
-      );
-
-    return storedSuppliers
-      ? JSON.parse(storedSuppliers)
-      : initialSuppliers;
-  });
+      return storedSuppliers
+        ? JSON.parse(storedSuppliers)
+        : initialSuppliers;
+    });
 
   const [search, setSearch] =
     useState("");
@@ -77,61 +74,79 @@ const [suppliers, setSuppliers] =
   const [showModal, setShowModal] =
     useState(false);
 
-    useEffect(() => {
-  localStorage.setItem(
-    "suppliers",
-    JSON.stringify(suppliers)
+  const [
+    editingSupplier,
+    setEditingSupplier,
+  ] = useState<SupplierType | null>(
+    null
   );
-}, [suppliers]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "suppliers",
+      JSON.stringify(suppliers)
+    );
+  }, [suppliers]);
 
   const handleAddSupplier = (
-    supplier: any
+    supplier: SupplierType
   ) => {
     setSuppliers([
       ...suppliers,
       supplier,
     ]);
+
+    addActivity(
+      `Supplier Added: ${supplier.name}`
+    );
   };
 
   const handleDeleteSupplier = (
-  id: number
-) => {
-  setSuppliers(
-    suppliers.filter(
-      (supplier) =>
-        supplier.id !== id
-    )
-  );
-};
-const handleUpdateSupplier = (
-  updatedSupplier: any
-) => {
-  setSuppliers(
-    suppliers.map((supplier) =>
-      supplier.id === updatedSupplier.id
-        ? updatedSupplier
-        : supplier
-    )
-  );
+    id: number
+  ) => {
+    setSuppliers(
+      suppliers.filter(
+        (supplier) =>
+          supplier.id !== id
+      )
+    );
 
-  setEditingSupplier(null);
-};
+    addActivity(
+      "Supplier Deleted"
+    );
+  };
+
+  const handleUpdateSupplier = (
+    updatedSupplier: SupplierType
+  ) => {
+    setSuppliers(
+      suppliers.map((supplier) =>
+        supplier.id ===
+        updatedSupplier.id
+          ? updatedSupplier
+          : supplier
+      )
+    );
+
+    addActivity(
+      `Supplier Updated: ${updatedSupplier.name}`
+    );
+
+    setEditingSupplier(null);
+  };
 
   const filteredSuppliers =
     suppliers.filter((supplier) =>
       supplier.name
         .toLowerCase()
-        .includes(search.toLowerCase())
+        .includes(
+          search.toLowerCase()
+        )
     );
-
-    const [editingSupplier, setEditingSupplier] =
-  useState<any>(null);
 
   return (
     <div>
-
       <div className="flex justify-between items-center mb-6">
-
         <h1 className="text-3xl font-bold">
           Supplier Management
         </h1>
@@ -144,7 +159,6 @@ const handleUpdateSupplier = (
         >
           Add Supplier
         </button>
-
       </div>
 
       <input
@@ -152,50 +166,44 @@ const handleUpdateSupplier = (
         placeholder="Search supplier..."
         value={search}
         onChange={(e) =>
-          setSearch(e.target.value)
+          setSearch(
+            e.target.value
+          )
         }
         className="w-full mb-5 p-3 rounded bg-black border border-gray-700"
       />
 
-      {/* <SupplierTable
+      <SupplierTable
         suppliers={filteredSuppliers}
-      /> */}
-      {/* <SupplierTable
-  suppliers={filteredSuppliers}
-  onDelete={handleDeleteSupplier}
-/> */}
-<SupplierTable
-  suppliers={filteredSuppliers}
-  onDelete={handleDeleteSupplier}
-  onEdit={(supplier) => {
-    setEditingSupplier(
-      supplier
-    );
-    setShowModal(true);
-  }}
-/>
+        onDelete={
+          handleDeleteSupplier
+        }
+        onEdit={(supplier) => {
+          setEditingSupplier(
+            supplier
+          );
+          setShowModal(true);
+        }}
+      />
 
       {showModal && (
-        // <AddSupplierModal
-        //   onClose={() =>
-        //     setShowModal(false)
-        //   }
-        //   onAdd={handleAddSupplier}
-        // />
         <AddSupplierModal
-  supplier={editingSupplier}
-  onClose={() => {
-    setShowModal(false);
-    setEditingSupplier(null);
-  }}
-  onAdd={
-    editingSupplier
-      ? handleUpdateSupplier
-      : handleAddSupplier
-  }
-/>
+          supplier={
+            editingSupplier
+          }
+          onClose={() => {
+            setShowModal(false);
+            setEditingSupplier(
+              null
+            );
+          }}
+          onAdd={
+            editingSupplier
+              ? handleUpdateSupplier
+              : handleAddSupplier
+          }
+        />
       )}
-
     </div>
   );
 }

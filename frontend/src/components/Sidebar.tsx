@@ -78,6 +78,9 @@ import {
   Package,
   Users,
 } from "lucide-react";
+// import {
+//   Package,
+// } from "lucide-react";
 
 function Sidebar() {
   const location = useLocation();
@@ -103,6 +106,11 @@ function Sidebar() {
       path: "/material",
       icon: <Package size={18} />,
     },
+    {
+  name: "Store",
+  path: "/store",
+  icon: <Package size={18} />,
+},
 
     {
   name: "Employee",

@@ -1,6 +1,9 @@
 export interface StoreType {
   id: number;
-  name: string;
-  location: string;
-  capacity: number;
+  district: string;
+  subdivision: string;
+  block: string;
+  storeCode: string;
+  storeName: string;
+  storeType: string;
 }
