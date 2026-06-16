@@ -455,26 +455,484 @@
 // }
 
 // export default Supplier;
+// import MainLayout from "../../layouts/MainLayout";
+// import SupplierTable from "../../components/SupplierTable";
+// import AddSupplierModal from "../../components/AddSupplierModal";
+// import { suppliers as initialSuppliers } from "../../services/supplierService";
+// import { addActivity } from "../../services/activityService";
+// import { useEffect, useState } from "react";
+// import type { Supplier } from "../../types/Supplier";
+
+// function SupplierPage() {
+
+//   const [suppliers, setSuppliers] =
+//     useState<Supplier[]>(() => {
+
+//       const storedSuppliers =
+//         localStorage.getItem("suppliers");
+
+//       return storedSuppliers
+//         ? JSON.parse(storedSuppliers)
+//         : initialSuppliers;
+//     });
+
+//   const [search, setSearch] =
+//     useState("");
+
+//   const [showModal, setShowModal] =
+//     useState(false);
+
+//   const [editingSupplier, setEditingSupplier] =
+//     useState<Supplier | null>(null);
+
+//   useEffect(() => {
+
+//     localStorage.setItem(
+//       "suppliers",
+//       JSON.stringify(suppliers)
+//     );
+
+//   }, [suppliers]);
+
+//   const handleAddSupplier = (
+//     supplier: Supplier
+//   ) => {
+
+//     setSuppliers([
+//       ...suppliers,
+//       supplier,
+//     ]);
+
+//     addActivity(
+//       `Supplier Added: ${supplier.name}`
+//     );
+//   };
+
+//   const handleDeleteSupplier = (
+//     id: number
+//   ) => {
+
+//     setSuppliers(
+//       suppliers.filter(
+//         (supplier) =>
+//           supplier.id !== id
+//       )
+//     );
+
+//     addActivity(
+//       "Supplier Deleted"
+//     );
+//   };
+
+//   const handleUpdateSupplier = (
+//     updatedSupplier: Supplier
+//   ) => {
+
+//     setSuppliers(
+//       suppliers.map(
+//         (supplier) =>
+//           supplier.id ===
+//           updatedSupplier.id
+//             ? updatedSupplier
+//             : supplier
+//       )
+//     );
+
+//     addActivity(
+//       `Supplier Updated: ${updatedSupplier.name}`
+//     );
+
+//     setEditingSupplier(null);
+//   };
+
+//   const filteredSuppliers =
+//     suppliers.filter(
+//       (supplier) =>
+//         supplier.name
+//           .toLowerCase()
+//           .includes(
+//             search.toLowerCase()
+//           )
+//     );
+
+//   return (
+//     <MainLayout>
+//       <div>
+
+//         <div className="flex justify-between items-center mb-6">
+
+//           <h1 className="text-3xl font-bold">
+//             Supplier
+//           </h1>
+
+//           <button
+//             onClick={() =>
+//               setShowModal(true)
+//             }
+//             className="
+//             bg-green-600
+//             hover:bg-green-700
+//             px-4
+//             py-2
+//             rounded
+//             "
+//           >
+//             Add Supplier
+//           </button>
+
+//         </div>
+
+//         <div className="flex justify-between items-center mb-5">
+
+//           <div className="flex gap-3">
+
+//             <button
+//               className="
+//               bg-gray-700
+//               hover:bg-gray-600
+//               px-4
+//               py-2
+//               rounded
+//               "
+//             >
+//               Excel
+//             </button>
+
+//             <button
+//               className="
+//               bg-gray-700
+//               hover:bg-gray-600
+//               px-4
+//               py-2
+//               rounded
+//               "
+//             >
+//               PDF
+//             </button>
+
+//           </div>
+
+//           <div className="flex items-center gap-2">
+
+//             <label>
+//               Search:
+//             </label>
+
+//             <input
+//               type="text"
+//               value={search}
+//               onChange={(e) =>
+//                 setSearch(
+//                   e.target.value
+//                 )
+//               }
+//               className="
+//               w-64
+//               p-2
+//               rounded
+//               bg-black
+//               border
+//               border-gray-700
+//               "
+//             />
+
+//           </div>
+
+//         </div>
+
+//         <SupplierTable
+//           suppliers={
+//             filteredSuppliers
+//           }
+//           onDelete={
+//             handleDeleteSupplier
+//           }
+//           onEdit={(supplier) => {
+
+//             setEditingSupplier(
+//               supplier
+//             );
+
+//             setShowModal(true);
+
+//           }}
+//         />
+
+//         {showModal && (
+
+//           <AddSupplierModal
+//             supplier={
+//               editingSupplier
+//             }
+//             onClose={() => {
+
+//               setShowModal(false);
+
+//               setEditingSupplier(
+//                 null
+//               );
+
+//             }}
+//             onAdd={
+//               editingSupplier
+//                 ? handleUpdateSupplier
+//                 : handleAddSupplier
+//             }
+//           />
+
+//         )}
+
+//       </div>
+//     </MainLayout>
+//   );
+// }
+
+// export default SupplierPage;
+// import MainLayout from "../../layouts/MainLayout";
+// import SupplierTable from "../../components/SupplierTable";
+// import AddSupplierModal from "../../components/AddSupplierModal";
+
+// import { addActivity } from "../../services/activityService";
+// import { getSuppliers } from "../../services/api";
+
+// import { useEffect, useState } from "react";
+// import type { Supplier } from "../../types/Supplier";
+
+// function SupplierPage() {
+//   const [suppliers, setSuppliers] =
+//     useState<Supplier[]>([]);
+
+//   const [search, setSearch] =
+//     useState("");
+
+//   const [showModal, setShowModal] =
+//     useState(false);
+
+//   const [editingSupplier, setEditingSupplier] =
+//     useState<Supplier | null>(null);
+
+//   useEffect(() => {
+//     const fetchSuppliers =
+//       async () => {
+//         try {
+//           const data =
+//             await getSuppliers();
+
+//           setSuppliers(data);
+//         } catch (error) {
+//           console.error(
+//             "Failed to fetch suppliers:",
+//             error
+//           );
+//         }
+//       };
+
+//     fetchSuppliers();
+//   }, []);
+
+//   const handleAddSupplier = (
+//     supplier: Supplier
+//   ) => {
+//     setSuppliers([
+//       ...suppliers,
+//       supplier,
+//     ]);
+
+//     addActivity(
+//       `Supplier Added: ${supplier.name}`
+//     );
+//   };
+
+//   const handleDeleteSupplier = (
+//     id: number
+//   ) => {
+//     setSuppliers(
+//       suppliers.filter(
+//         (supplier) =>
+//           supplier.id !== id
+//       )
+//     );
+
+//     addActivity(
+//       "Supplier Deleted"
+//     );
+//   };
+
+//   const handleUpdateSupplier = (
+//     updatedSupplier: Supplier
+//   ) => {
+//     setSuppliers(
+//       suppliers.map(
+//         (supplier) =>
+//           supplier.id ===
+//           updatedSupplier.id
+//             ? updatedSupplier
+//             : supplier
+//       )
+//     );
+
+//     addActivity(
+//       `Supplier Updated: ${updatedSupplier.name}`
+//     );
+
+//     setEditingSupplier(null);
+//   };
+
+//   const filteredSuppliers =
+//     suppliers.filter(
+//       (supplier) =>
+//         supplier.name
+//           ?.toLowerCase()
+//           .includes(
+//             search.toLowerCase()
+//           )
+//     );
+
+//   return (
+//     <MainLayout>
+//       <div>
+//         <div className="flex justify-between items-center mb-6">
+//           <h1 className="text-3xl font-bold">
+//             Supplier
+//           </h1>
+
+//           <button
+//             onClick={() =>
+//               setShowModal(true)
+//             }
+//             className="
+//             bg-green-600
+//             hover:bg-green-700
+//             px-4
+//             py-2
+//             rounded
+//             "
+//           >
+//             Add Supplier
+//           </button>
+//         </div>
+
+//         <div className="flex justify-between items-center mb-5">
+//           <div className="flex gap-3">
+//             <button
+//               className="
+//               bg-gray-700
+//               hover:bg-gray-600
+//               px-4
+//               py-2
+//               rounded
+//               "
+//             >
+//               Excel
+//             </button>
+
+//             <button
+//               className="
+//               bg-gray-700
+//               hover:bg-gray-600
+//               px-4
+//               py-2
+//               rounded
+//               "
+//             >
+//               PDF
+//             </button>
+//           </div>
+
+//           <div className="flex items-center gap-2">
+//             <label>
+//               Search:
+//             </label>
+
+//             <input
+//               type="text"
+//               value={search}
+//               onChange={(e) =>
+//                 setSearch(
+//                   e.target.value
+//                 )
+//               }
+//               className="
+//               w-64
+//               p-2
+//               rounded
+//               bg-black
+//               border
+//               border-gray-700
+//               "
+//             />
+//           </div>
+//         </div>
+
+//         <SupplierTable
+//           suppliers={
+//             filteredSuppliers
+//           }
+//           onDelete={
+//             handleDeleteSupplier
+//           }
+//           onEdit={(supplier) => {
+//             setEditingSupplier(
+//               supplier
+//             );
+
+//             setShowModal(true);
+//           }}
+//         />
+
+//         {showModal && (
+//           <AddSupplierModal
+//             supplier={
+//               editingSupplier
+//             }
+//             onClose={() => {
+//               setShowModal(false);
+
+//               setEditingSupplier(
+//                 null
+//               );
+//             }}
+//             onAdd={
+//               editingSupplier
+//                 ? handleUpdateSupplier
+//                 : handleAddSupplier
+//             }
+//           />
+//         )}
+//       </div>
+//     </MainLayout>
+//   );
+// }
+
+// export default SupplierPage;
 import MainLayout from "../../layouts/MainLayout";
 import SupplierTable from "../../components/SupplierTable";
 import AddSupplierModal from "../../components/AddSupplierModal";
-import { suppliers as initialSuppliers } from "../../services/supplierService";
+
 import { addActivity } from "../../services/activityService";
+// import { getSuppliers } from "../../services/api";
+// import {
+//   getSuppliers,
+//   addSupplier,
+// } from "../../services/api";
+// import {
+//   getSuppliers,
+//   addSupplier,
+//   deleteSupplier,
+// } from "../../services/api";
+import {
+  getSuppliers,
+  addSupplier,
+  deleteSupplier,
+  updateSupplier,
+} from "../../services/api";
+
 import { useEffect, useState } from "react";
 import type { Supplier } from "../../types/Supplier";
 
 function SupplierPage() {
-
   const [suppliers, setSuppliers] =
-    useState<Supplier[]>(() => {
-
-      const storedSuppliers =
-        localStorage.getItem("suppliers");
-
-      return storedSuppliers
-        ? JSON.parse(storedSuppliers)
-        : initialSuppliers;
-    });
+    useState<Supplier[]>([]);
 
   const [search, setSearch] =
     useState("");
@@ -486,70 +944,186 @@ function SupplierPage() {
     useState<Supplier | null>(null);
 
   useEffect(() => {
+    const fetchSuppliers =
+      async () => {
+        try {
+          const data =
+            await getSuppliers();
 
-    localStorage.setItem(
-      "suppliers",
-      JSON.stringify(suppliers)
-    );
+          setSuppliers(data);
+        } catch (error) {
+          console.error(
+            "Failed to fetch suppliers:",
+            error
+          );
+        }
+      };
 
-  }, [suppliers]);
+    fetchSuppliers();
+  }, []);
 
-  const handleAddSupplier = (
+  // const handleAddSupplier = (
+  //   supplier: Supplier
+  // ) => {
+  //   setSuppliers((prev) => [
+  //     ...prev,
+  //     supplier,
+  //   ]);
+
+  //   addActivity(
+  //     `Supplier Added: ${supplier.name}`
+  //   );
+  // };
+  const handleAddSupplier =
+  async (
     supplier: Supplier
   ) => {
 
-    setSuppliers([
-      ...suppliers,
-      supplier,
-    ]);
+    try {
 
-    addActivity(
-      `Supplier Added: ${supplier.name}`
-    );
+      const savedSupplier =
+        await addSupplier(
+          supplier
+        );
+
+      setSuppliers(
+        (prev) => [
+          ...prev,
+          savedSupplier,
+        ]
+      );
+
+      addActivity(
+        `Supplier Added: ${savedSupplier.name}`
+      );
+
+      setShowModal(false);
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+    }
+
   };
 
-  const handleDeleteSupplier = (
-    id: number
-  ) => {
+  // const handleDeleteSupplier = (
+  //   id: number
+  // ) => {
+  //   setSuppliers((prev) =>
+  //     prev.filter(
+  //       (supplier) =>
+  //         Number(supplier.id) !== id
+  //     )
+  //   );
 
-    setSuppliers(
-      suppliers.filter(
-        (supplier) =>
-          supplier.id !== id
-      )
-    );
+  //   addActivity(
+  //     "Supplier Deleted"
+  //   );
+  // };
+  const handleDeleteSupplier =
+  async (id: number) => {
 
-    addActivity(
-      "Supplier Deleted"
-    );
+    try {
+
+      await deleteSupplier(id);
+
+      setSuppliers((prev) =>
+        prev.filter(
+          (supplier) =>
+            Number(supplier.id) !== id
+        )
+      );
+
+      addActivity(
+        "Supplier Deleted"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Delete failed:",
+        error
+      );
+
+    }
+
   };
 
-  const handleUpdateSupplier = (
+  // const handleUpdateSupplier = (
+  //   updatedSupplier: Supplier
+  // ) => {
+  //   setSuppliers((prev) =>
+  //     prev.map((supplier) =>
+  //       Number(supplier.id) ===
+  //       Number(updatedSupplier.id)
+  //         ? updatedSupplier
+  //         : supplier
+  //     )
+  //   );
+
+  //   addActivity(
+  //     `Supplier Updated: ${updatedSupplier.name}`
+  //   );
+
+  //   setEditingSupplier(null);
+  // };
+  const handleUpdateSupplier =
+  async (
     updatedSupplier: Supplier
   ) => {
 
-    setSuppliers(
-      suppliers.map(
-        (supplier) =>
-          supplier.id ===
-          updatedSupplier.id
-            ? updatedSupplier
-            : supplier
-      )
-    );
+    try {
 
-    addActivity(
-      `Supplier Updated: ${updatedSupplier.name}`
-    );
+      const savedSupplier =
+        await updateSupplier(
+          Number(
+            updatedSupplier.id
+          ),
+          updatedSupplier
+        );
 
-    setEditingSupplier(null);
+      setSuppliers((prev) =>
+        prev.map(
+          (supplier) =>
+            Number(
+              supplier.id
+            ) ===
+            Number(
+              savedSupplier.id
+            )
+              ? savedSupplier
+              : supplier
+        )
+      );
+
+      addActivity(
+        `Supplier Updated: ${savedSupplier.name}`
+      );
+
+      setEditingSupplier(
+        null
+      );
+
+      setShowModal(false);
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+    }
+
   };
 
   const filteredSuppliers =
     suppliers.filter(
       (supplier) =>
         supplier.name
-          .toLowerCase()
+          ?.toLowerCase()
           .includes(
             search.toLowerCase()
           )
@@ -558,11 +1132,9 @@ function SupplierPage() {
   return (
     <MainLayout>
       <div>
-
         <div className="flex justify-between items-center mb-6">
-
           <h1 className="text-3xl font-bold">
-            Supplier
+            Supplier Management
           </h1>
 
           <button
@@ -579,13 +1151,10 @@ function SupplierPage() {
           >
             Add Supplier
           </button>
-
         </div>
 
         <div className="flex justify-between items-center mb-5">
-
           <div className="flex gap-3">
-
             <button
               className="
               bg-gray-700
@@ -609,11 +1178,9 @@ function SupplierPage() {
             >
               PDF
             </button>
-
           </div>
 
           <div className="flex items-center gap-2">
-
             <label>
               Search:
             </label>
@@ -635,9 +1202,7 @@ function SupplierPage() {
               border-gray-700
               "
             />
-
           </div>
-
         </div>
 
         <SupplierTable
@@ -648,30 +1213,24 @@ function SupplierPage() {
             handleDeleteSupplier
           }
           onEdit={(supplier) => {
-
             setEditingSupplier(
               supplier
             );
 
             setShowModal(true);
-
           }}
         />
 
         {showModal && (
-
           <AddSupplierModal
             supplier={
               editingSupplier
             }
             onClose={() => {
-
               setShowModal(false);
-
               setEditingSupplier(
                 null
               );
-
             }}
             onAdd={
               editingSupplier
@@ -679,9 +1238,7 @@ function SupplierPage() {
                 : handleAddSupplier
             }
           />
-
         )}
-
       </div>
     </MainLayout>
   );
