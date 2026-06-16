@@ -328,6 +328,7 @@
 // }
 
 // export default Store;
+import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
 
 import StoreTable from "../../components/StoreTable";
@@ -459,128 +460,130 @@ function Store() {
   );
 
   return (
-    <div>
+    <MainLayout>
+      <div>
 
-      <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
 
-        <h1 className="text-3xl font-bold">
-          Store Management
-        </h1>
-
-        <button
-          onClick={() =>
-            setShowModal(true)
-          }
-          className="
-          bg-green-600
-          hover:bg-green-700
-          px-4
-          py-2
-          rounded
-          "
-        >
-          Add Store
-        </button>
-
-      </div>
-
-      <div className="flex justify-between items-center mb-5">
-
-        <div className="flex gap-3">
+          <h1 className="text-3xl font-bold">
+            Store Management
+          </h1>
 
           <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            Excel
-          </button>
-
-          <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            PDF
-          </button>
-
-        </div>
-
-        <div className="flex items-center gap-2">
-
-          <label>
-            Search:
-          </label>
-
-          <input
-            type="text"
-            value={search}
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
+            onClick={() =>
+              setShowModal(true)
             }
             className="
-            p-2
-            w-64
+            bg-green-600
+            hover:bg-green-700
+            px-4
+            py-2
             rounded
-            bg-black
-            border
-            border-gray-700
             "
-          />
+          >
+            Add Store
+          </button>
 
         </div>
 
-      </div>
+        <div className="flex justify-between items-center mb-5">
 
-      <StoreTable
-        stores={filteredStores}
-        onDelete={
-          handleDeleteStore
-        }
-        onEdit={(store) => {
+          <div className="flex gap-3">
 
-          setEditingStore(
-            store
-          );
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              Excel
+            </button>
 
-          setShowModal(true);
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              PDF
+            </button>
 
-        }}
-      />
+          </div>
 
-      {showModal && (
+          <div className="flex items-center gap-2">
 
-        <AddStoreModal
-          store={editingStore}
-          onClose={() => {
+            <label>
+              Search:
+            </label>
 
-            setShowModal(
-              false
-            );
+            <input
+              type="text"
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="
+              p-2
+              w-64
+              rounded
+              bg-black
+              border
+              border-gray-700
+              "
+            />
+
+          </div>
+
+        </div>
+
+        <StoreTable
+          stores={filteredStores}
+          onDelete={
+            handleDeleteStore
+          }
+          onEdit={(store) => {
 
             setEditingStore(
-              null
+              store
             );
 
+            setShowModal(true);
+
           }}
-          onAdd={
-            editingStore
-              ? handleUpdateStore
-              : handleAddStore
-          }
         />
 
-      )}
+        {showModal && (
 
-    </div>
+          <AddStoreModal
+            store={editingStore}
+            onClose={() => {
+
+              setShowModal(
+                false
+              );
+
+              setEditingStore(
+                null
+              );
+
+            }}
+            onAdd={
+              editingStore
+                ? handleUpdateStore
+                : handleAddStore
+            }
+          />
+
+        )}
+
+      </div>
+    </MainLayout>
   );
 }
 

@@ -301,6 +301,7 @@
 // }
 
 // export default Employee;
+import MainLayout from "../../layouts/MainLayout";
 import EmployeeTable from "../../components/EmployeeTable";
 import AddEmployeeModal from "../../components/AddEmployeeModal";
 import { employees as initialEmployees } from "../../services/employeeService";
@@ -422,131 +423,133 @@ function Employee() {
     );
 
   return (
-    <div>
+    <MainLayout>
+      <div>
 
-      <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
 
-        <h1 className="text-3xl font-bold">
-          Employee Management
-        </h1>
-
-        <button
-          onClick={() =>
-            setShowModal(true)
-          }
-          className="
-          bg-green-600
-          px-4
-          py-2
-          rounded
-          "
-        >
-          Add Employee
-        </button>
-
-      </div>
-
-      <div className="flex justify-between items-center mb-5">
-
-        <div className="flex gap-3">
+          <h1 className="text-3xl font-bold">
+            Employee Management
+          </h1>
 
           <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            Excel
-          </button>
-
-          <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            PDF
-          </button>
-
-        </div>
-
-        <div className="flex items-center gap-2">
-
-          <label>
-            Search:
-          </label>
-
-          <input
-            type="text"
-            value={search}
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
+            onClick={() =>
+              setShowModal(true)
             }
             className="
-            p-2
-            w-64
+            bg-green-600
+            px-4
+            py-2
             rounded
-            bg-black
-            border
-            border-gray-700
             "
-          />
+          >
+            Add Employee
+          </button>
 
         </div>
 
-      </div>
+        <div className="flex justify-between items-center mb-5">
 
-      <EmployeeTable
-        employees={
-          filteredEmployees
-        }
-        onDelete={
-          handleDeleteEmployee
-        }
-        onEdit={(employee) => {
+          <div className="flex gap-3">
 
-          setEditingEmployee(
-            employee
-          );
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              Excel
+            </button>
 
-          setShowModal(true);
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              PDF
+            </button>
 
-        }}
-      />
+          </div>
 
-      {showModal && (
+          <div className="flex items-center gap-2">
 
-        <AddEmployeeModal
-          employee={
-            editingEmployee
+            <label>
+              Search:
+            </label>
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="
+              p-2
+              w-64
+              rounded
+              bg-black
+              border
+              border-gray-700
+              "
+            />
+
+          </div>
+
+        </div>
+
+        <EmployeeTable
+          employees={
+            filteredEmployees
           }
-          onClose={() => {
-
-            setShowModal(
-              false
-            );
+          onDelete={
+            handleDeleteEmployee
+          }
+          onEdit={(employee) => {
 
             setEditingEmployee(
-              null
+              employee
             );
 
+            setShowModal(true);
+
           }}
-          onAdd={
-            editingEmployee
-              ? handleUpdateEmployee
-              : handleAddEmployee
-          }
         />
 
-      )}
+        {showModal && (
 
-    </div>
+          <AddEmployeeModal
+            employee={
+              editingEmployee
+            }
+            onClose={() => {
+
+              setShowModal(
+                false
+              );
+
+              setEditingEmployee(
+                null
+              );
+
+            }}
+            onAdd={
+              editingEmployee
+                ? handleUpdateEmployee
+                : handleAddEmployee
+            }
+          />
+
+        )}
+
+      </div>
+    </MainLayout>
   );
 }
 

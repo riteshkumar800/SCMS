@@ -325,6 +325,7 @@
 // }
 
 // export default Material;
+import MainLayout from "../../layouts/MainLayout";
 import MaterialTable from "../../components/MaterialTable";
 import AddMaterialModal from "../../components/AddMaterialModal";
 import { materials as initialMaterials } from "../../services/materialService";
@@ -432,123 +433,125 @@ function Material() {
     );
 
   return (
-    <div>
+    <MainLayout>
+      <div>
 
-      <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
 
-        <h1 className="text-3xl font-bold">
-          Material Management
-        </h1>
-
-        <button
-          onClick={() =>
-            setShowModal(true)
-          }
-          className="
-          bg-green-600
-          px-4
-          py-2
-          rounded
-          "
-        >
-          Add Material
-        </button>
-
-      </div>
-
-      <div className="flex justify-between items-center mb-5">
-
-        <div className="flex gap-3">
+          <h1 className="text-3xl font-bold">
+            Material Management
+          </h1>
 
           <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            Excel
-          </button>
-
-          <button
-            className="
-            px-4
-            py-2
-            bg-gray-700
-            rounded
-            "
-          >
-            PDF
-          </button>
-
-        </div>
-
-        <div className="flex items-center gap-2">
-
-          <label>
-            Search:
-          </label>
-
-          <input
-            type="text"
-            value={search}
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
+            onClick={() =>
+              setShowModal(true)
             }
             className="
-            p-2
-            w-64
+            bg-green-600
+            px-4
+            py-2
             rounded
-            bg-black
-            border
-            border-gray-700
             "
-          />
+          >
+            Add Material
+          </button>
 
         </div>
 
-      </div>
+        <div className="flex justify-between items-center mb-5">
 
-      <MaterialTable
-        materials={
-          filteredMaterials
-        }
-        onDelete={
-          handleDeleteMaterial
-        }
-        onEdit={(material) => {
-          setEditingMaterial(
-            material
-          );
+          <div className="flex gap-3">
 
-          setShowModal(true);
-        }}
-      />
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              Excel
+            </button>
 
-      {showModal && (
-        <AddMaterialModal
-          material={
-            editingMaterial
+            <button
+              className="
+              px-4
+              py-2
+              bg-gray-700
+              rounded
+              "
+            >
+              PDF
+            </button>
+
+          </div>
+
+          <div className="flex items-center gap-2">
+
+            <label>
+              Search:
+            </label>
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="
+              p-2
+              w-64
+              rounded
+              bg-black
+              border
+              border-gray-700
+              "
+            />
+
+          </div>
+
+        </div>
+
+        <MaterialTable
+          materials={
+            filteredMaterials
           }
-          onClose={() => {
-            setShowModal(false);
-
+          onDelete={
+            handleDeleteMaterial
+          }
+          onEdit={(material) => {
             setEditingMaterial(
-              null
+              material
             );
-          }}
-          onAdd={
-            editingMaterial
-              ? handleUpdateMaterial
-              : handleAddMaterial
-          }
-        />
-      )}
 
-    </div>
+            setShowModal(true);
+          }}
+        />
+
+        {showModal && (
+          <AddMaterialModal
+            material={
+              editingMaterial
+            }
+            onClose={() => {
+              setShowModal(false);
+
+              setEditingMaterial(
+                null
+              );
+            }}
+            onAdd={
+              editingMaterial
+                ? handleUpdateMaterial
+                : handleAddMaterial
+            }
+          />
+        )}
+
+      </div>
+    </MainLayout>
   );
 }
 
