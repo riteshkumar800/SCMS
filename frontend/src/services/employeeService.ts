@@ -16,72 +16,151 @@
 //     salary: 60000,
 //   },
 // ];
-import type { Employee } from "../types/Employee";
+// import type { Employee } from "../types/Employee";
 
-export const employees: Employee[] = [
-  {
-    id: 1,
+// export const employees: Employee[] = [
+//   {
+//     id: 1,
 
-    employeeId: "EMP001",
+//     employeeId: "EMP001",
 
-    name: "John Doe",
+//     name: "John Doe",
 
-    email: "john@gmail.com",
+//     email: "john@gmail.com",
 
-    mobile: "9876543210",
+//     mobile: "9876543210",
 
-    department: "Production",
+//     department: "Production",
 
-    designation: "Production Manager",
+//     designation: "Production Manager",
 
-    salary: 50000,
+//     salary: 50000,
 
-    joiningDate: "2023-01-15",
+//     joiningDate: "2023-01-15",
 
-    status: "Active",
-  },
+//     status: "Active",
+//   },
 
-  {
-    id: 2,
+//   {
+//     id: 2,
 
-    employeeId: "EMP002",
+//     employeeId: "EMP002",
 
-    name: "Sarah Smith",
+//     name: "Sarah Smith",
 
-    email: "sarah@gmail.com",
+//     email: "sarah@gmail.com",
 
-    mobile: "9123456789",
+//     mobile: "9123456789",
 
-    department: "Logistics",
+//     department: "Logistics",
 
-    designation: "Logistics Officer",
+//     designation: "Logistics Officer",
 
-    salary: 60000,
+//     salary: 60000,
 
-    joiningDate: "2022-08-20",
+//     joiningDate: "2022-08-20",
 
-    status: "Active",
-  },
+//     status: "Active",
+//   },
 
-  {
-    id: 3,
+//   {
+//     id: 3,
 
-    employeeId: "EMP003",
+//     employeeId: "EMP003",
 
-    name: "Michael Johnson",
+//     name: "Michael Johnson",
 
-    email: "michael@gmail.com",
+//     email: "michael@gmail.com",
 
-    mobile: "9988776655",
+//     mobile: "9988776655",
 
-    department: "Warehouse",
+//     department: "Warehouse",
 
-    designation: "Store Supervisor",
+//     designation: "Store Supervisor",
 
-    salary: 45000,
+//     salary: 45000,
 
-    joiningDate: "2024-02-10",
+//     joiningDate: "2024-02-10",
 
-    status: "Inactive",
-  },
-];
+//     status: "Inactive",
+//   },
+// ];
+const API_URL = "http://localhost:5001/api";
+
+// ======================
+// EMPLOYEE APIs
+// ======================
+
+export const getEmployees = async () => {
+
+  const response = await fetch(
+    `${API_URL}/employees`
+  );
+
+  return response.json();
+
+};
+
+export const addEmployee = async (
+  employee: any
+) => {
+
+  const response = await fetch(
+    `${API_URL}/employees`,
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+
+      body: JSON.stringify(
+        employee
+      ),
+    }
+  );
+
+  return response.json();
+
+};
+
+export const updateEmployee = async (
+  id: number,
+  employee: any
+) => {
+
+  const response = await fetch(
+    `${API_URL}/employees/${id}`,
+    {
+      method: "PUT",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+
+      body: JSON.stringify(
+        employee
+      ),
+    }
+  );
+
+  return response.json();
+
+};
+
+export const deleteEmployee = async (
+  id: number
+) => {
+
+  const response = await fetch(
+    `${API_URL}/employees/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  return response.json();
+
+};
