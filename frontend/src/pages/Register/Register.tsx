@@ -124,7 +124,11 @@ const handleRegister = async () => {
 
       alert(result.message);
 
-      navigate("/");
+    //   navigate("/");
+    localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("user", JSON.stringify(result.user));
+
+    navigate("/dashboard");
 
     }
 
