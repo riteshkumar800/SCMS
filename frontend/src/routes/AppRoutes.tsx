@@ -99,6 +99,7 @@ import {
 } from "react-router-dom";
 
 import Login from "../pages/Login/Login";
+import Register from "../pages/Register/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
 // import Supplier from "../pages/supplier/Supplier";
 import SupplierPage from "../pages/supplier/Supplier";
@@ -118,6 +119,10 @@ function AppRoutes() {
           path="/"
           element={<Login />}
         />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
         <Route
           path="/dashboard"
@@ -125,21 +130,21 @@ function AppRoutes() {
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          }
+            }
         />
 
-        {/* <Route
+        <Route
           path="/supplier"
           element={
             <ProtectedRoute>
-              <Supplier />
+              <SupplierPage />
             </ProtectedRoute>
           }
-        /> */}
-        <Route
+        />
+        {/* <Route
   path="/supplier"
   element={<SupplierPage />}
-/>
+/> */}
 
         <Route
           path="/material"

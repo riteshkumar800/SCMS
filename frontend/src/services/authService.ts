@@ -1,26 +1,27 @@
-export const login = (
-  email: string,
-  password: string
-) => {
-  if (
-    email === "admin@scms.com" &&
-    password === "admin123"
-  ) {
-    localStorage.setItem(
-      "isAuthenticated",
-      "true"
-    );
+// export const login = (
+//   email: string,
+//   password: string
+// ) => {
+//   if (
+//     email === "admin@scms.com" &&
+//     password === "admin123"
+//   ) {
+//     localStorage.setItem(
+//       "isAuthenticated",
+//       "true"
+//     );
 
-    return true;
-  }
+//     return true;
+//   }
 
-  return false;
-};
+//   return false;
+// };
 
 export const logout = () => {
   localStorage.removeItem(
     "isAuthenticated"
   );
+  localStorage.removeItem("user");
 };
 
 export const isAuthenticated = () => {

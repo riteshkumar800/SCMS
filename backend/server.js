@@ -62,6 +62,11 @@
 // }
 
 // startServer();
+const captchaRoutes =
+ require("./routes/captchaRoutes");
+
+const authRoutes =
+ require("./routes/authRoutes");
 
 const manufacturerRoutes =
   require(
@@ -85,11 +90,17 @@ const {
   connectRabbitMQ,
 } = require("./rabbitmq");
 
+require("./db");
+
 const app = express();
 
 app.use(cors());
 
 app.use(express.json());
+
+app.use("/api/captcha", captchaRoutes);
+
+app.use("/api/auth", authRoutes);
 
 app.use(
   "/api/suppliers",
@@ -112,6 +123,8 @@ app.use(
   "/api/manufacturers",
   manufacturerRoutes
 );
+
+
 
 app.get("/", (req, res) => {
 

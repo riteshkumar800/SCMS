@@ -329,7 +329,7 @@
 
 // export default Login;
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -341,80 +341,117 @@ function Login() {
   const [password, setPassword] =
     useState("");
 
-  const generateCaptcha = () => {
-    return Math.random()
-      .toString(36)
-      .substring(2, 7)
-      .toUpperCase();
-  };
+  // const generateCaptcha = () => {
+  //   return Math.random()
+  //     .toString(36)
+  //     .substring(2, 7)
+  //     .toUpperCase();
+  // };
 
-  const [captcha, setCaptcha] =
-    useState(generateCaptcha());
+  // const [captcha, setCaptcha] =
+  //   useState(generateCaptcha());
 
-  const [captchaInput, setCaptchaInput] =
-    useState("");
+  const [captchaImage, setCaptchaImage] = useState("");
 
-  const handleLogin = () => {
+  const [captchaId, setCaptchaId] = useState("");
 
-    if (
-      captchaInput !== captcha
-    ) {
-      alert("Invalid Captcha");
+  const [captchaInput, setCaptchaInput] = useState("");
 
-      setCaptcha(
-        generateCaptcha()
-      );
+  // const [captchaInput, setCaptchaInput] =
+  //   useState("");
 
-      setCaptchaInput("");
+  const loadCaptcha = async () => {
 
+  try {
+
+    const response = await fetch(
+      "http://localhost:5001/api/captcha"
+    );
+
+    const data = await response.json();
+
+    setCaptchaImage(data.image);
+
+    setCaptchaId(data.captchaId);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
+useEffect(() => {
+
+  loadCaptcha();
+
+}, []);
+
+//   const handleLogin = async() => {
+//   if (
+//   email === "admin@scms.com" &&
+//   password === "admin123"
+// ) {
+
+//   console.log("LOGIN SUCCESS");
+
+//   localStorage.setItem(
+//   "isAuthenticated",
+//   "true"
+// );
+
+//   // console.log(
+//   //   localStorage.getItem("isLoggedIn")
+//   // );
+
+//   navigate("/dashboard");
+// }else {
+
+//   alert("Invalid Credentials");
+// }
+//   };
+
+
+const handleLogin = async () => {
+  try {
+
+    if (!email || !password || !captchaInput || !captchaId) {
+      alert("Fill all fields");
       return;
     }
 
-    // if (
-    //   email === "admin@scms.com" &&
-    //   password === "admin123"
-    // ) {
+    const res = await fetch("http://localhost:5001/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        captchaId,
+        captchaAnswer: captchaInput,
+      }),
+    });
 
-    //   localStorage.setItem(
-    //     "isLoggedIn",
-    //     "true"
-    //   );
+    const data = await res.json();
 
-    //   setCaptchaInput("");
+    console.log("LOGIN RESPONSE:", data);
 
-    //   navigate("/dashboard");
+    if (!data.success) {
+      alert(data.message);
+      return;
+    }
 
-    // } else {
+    localStorage.setItem("isAuthenticated", "true");
+localStorage.setItem("user", JSON.stringify(data.user));
 
-    //   alert(
-    //     "Invalid Credentials"
-    //   );
+navigate("/dashboard");
 
-    //   setCaptcha(
-    //     generateCaptcha()
-    //   );
-
-    //   setCaptchaInput("");
-    // }
-    if (
-  email === "admin@scms.com" &&
-  password === "admin123"
-) {
-
-  console.log("LOGIN SUCCESS");
-
-  localStorage.setItem(
-  "isAuthenticated",
-  "true"
-);
-
-  console.log(
-    localStorage.getItem("isLoggedIn")
-  );
-
-  navigate("/dashboard");
-}
-  };
+  } catch (err) {
+    console.log(err);
+    alert("Server error");
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#020617] flex items-center justify-center px-4">
@@ -483,16 +520,17 @@ function Login() {
                 select-none
                 "
               >
-                {captcha}
+                <div
+                  className="flex justify-center"
+                  dangerouslySetInnerHTML={{
+                    __html: captchaImage
+                  }}
+                />
               </div>
 
               <button
                 type="button"
-                onClick={() =>
-                  setCaptcha(
-                    generateCaptcha()
-                  )
-                }
+                onClick={loadCaptcha}
                 className="
                 bg-gray-800
                 px-4
@@ -536,8 +574,21 @@ function Login() {
           >
             Sign In
           </button>
+          <p className="text-center text-gray-400 mt-6">
+
+          Don't have an account?{" "}
+
+          <span
+            onClick={() => navigate("/register")}
+            className="text-cyan-400 cursor-pointer hover:underline"
+          >
+            Create Account
+          </span>
+
+        </p>
 
         </div>
+        
 
         {/* RIGHT SIDE */}
 
